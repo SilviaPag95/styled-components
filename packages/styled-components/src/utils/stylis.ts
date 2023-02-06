@@ -1,4 +1,4 @@
-import { compile, Element, Middleware, middleware, prefixer, RULESET, stringify } from 'stylis';
+import { compile, Element, middleware, prefixer, RULESET, stringify } from 'stylis';
 import { Stringifier } from '../types';
 import { EMPTY_ARRAY, EMPTY_OBJECT } from './empties';
 import throwStyledError from './error';
@@ -9,7 +9,7 @@ const COMPLEX_SELECTOR_PREFIX = [':', '[', '.', '#'];
 
 export type ICreateStylisInstance = {
   options?: { namespace?: string; prefix?: boolean };
-  plugins?: Middleware[];
+  plugins?: stylis.Middleware[];
 };
 
 /**
@@ -47,7 +47,7 @@ function recursivelySetNamepace(compiled: Element[], namespace: String): Element
 export default function createStylisInstance(
   {
     options = EMPTY_OBJECT as object,
-    plugins = EMPTY_ARRAY as unknown as Middleware[],
+    plugins = EMPTY_ARRAY as unknown as stylis.Middleware[],
   }: ICreateStylisInstance = EMPTY_OBJECT as object
 ) {
   let _componentId: string;
@@ -79,7 +79,7 @@ export default function createStylisInstance(
    *
    * https://github.com/thysultan/stylis.js/tree/v4.0.2#abstract-syntax-structure
    */
-  const selfReferenceReplacementPlugin: Middleware = element => {
+  const selfReferenceReplacementPlugin: stylis.Middleware = element => {
     if (element.type === RULESET && element.value.includes('&')) {
       const props = element.props as string[];
       props[0] = props[0].replace(_selectorRegexp, selfReferenceReplacer);
